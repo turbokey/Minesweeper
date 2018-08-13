@@ -1,0 +1,1517 @@
+﻿Version=5.2
+NumberOfModules=2
+Module1=PinchZoomAndMove
+Module2=Starter
+Build1=Default,com.serogen.minesweeper.pro,Full
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.basic4ppc.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="9" android:targetSdkVersion="22"/>~\n~<supports-screens android:largeScreens="true"~\n~	android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'SetApplicationAttribute(android:theme, "@android:style/Theme.Holo")~\n~'End of default text.~\n~'End Appodeal Permissions~\n~'Appodeal
+IconFile=
+NumberOfFiles=42
+File1=About.png
+File2=beginner.png
+File3=Bestb.png
+File4=Beste.png
+File5=Besti.png
+File6=bmp101.bmp
+File7=bmp101XP.bmp
+File8=bmp102.bmp
+File9=bmp103.bmp
+File10=Cancel.png
+File11=custom.png
+File12=CustomPanel.png
+File13=exitbutton.png
+File14=expert.png
+File15=Fastest.png
+File16=flag.png
+File17=FlagXP.png
+File18=galka.png
+File19=gameb.png
+File20=Gamebp.png
+File21=helpb.png
+File22=Helpbp.png
+File23=Howtoplay.png
+File24=leaderboard.png
+File25=lose.wav
+File26=medium.png
+File27=Mine.bal
+File28=Mine.bmp
+File29=mine2.bmp
+File30=Minesweeper instruction.txt
+File31=new.png
+File32=OK.png
+File33=Pref.txt
+File34=Remads.png
+File35=Reset.png
+File36=resetp.png
+File37=sound.png
+File38=time.wav
+File39=Tint.png
+File40=vopr.png
+File41=VoprXP.png
+File42=win.wav
+NumberOfLibraries=9
+Library1=core
+Library2=reflection
+Library3=phone
+Library4=randomaccessfile
+Library5=stringutils
+Library6=animation
+Library7=gestures
+Library8=pinchzoomandmove
+Library9=stringfunctions
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: Minesweeper Classic
+	#VersionCode: 3
+	#VersionName: 1.2
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: portrait
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: true
+	#IncludeTitle: false
+#End Region
+
+Sub Process_Globals
+End Sub
+
+Sub Globals
+Dim PZ(1) As PinchZoomAndMove
+Dim NumView As Int
+Dim game As Boolean
+Dim DoubleClick As Timer
+Dim sf As StringFunctions
+Dim MP As MediaPlayer
+sf.Initialize
+Dim conCellHeight As Int
+Dim conCellWidth As Int
+Dim conZifraWidth As Int= 9%x
+Dim conZifraHeight As Int= 15%x
+Dim conFaceHeight As Int= 16%x
+Dim conFaceWidth As Int= 16%x
+Dim Doska(,) As Int  
+Dim Doska1(,) As Int
+Dim KolMines As Int=10
+Dim SizeX As Int=9
+Dim SizeY As Int=9
+Dim Timer1 As Timer
+Dim FlagT As Timer
+Dim VoprT As Timer
+Dim CloseCell As Int
+Dim GameOver As Boolean
+Type TIndikator(x As Long, y As Long, value As Int)
+Type TFace(x As Long, y As Long, Face As Int)
+Type TDoska(x As Long, y As Long, width As Long, height As Long)
+Dim ind(2) As TIndikator
+Dim Face As TFace
+Dim Dsk As TDoska
+Dim OldI As Int, OldJ As Int, OldX As Long, OldY As Long, OldFace As Int
+Dim xlong As Float,ylong As Float
+Dim mmm As Int=0
+Dim nnn As Int=0
+Dim Time0 As Long
+Dim LongClickTime =500 As Long
+Dim x0,y0 As Float
+Dim SrcRect As Rect
+Dim bmp As Bitmap
+Dim cnvs As Canvas
+Dim cnvs2 As Canvas
+Dim cnvs3 As Canvas
+Dim cnvs4 As Canvas
+Dim RectFon As Rect
+Dim Flag As ImageView
+Dim Vopr As ImageView
+Dim LongC As Boolean=False
+	Private New As Button
+	Private Beginner As Button
+	Private Medium As Button
+	Private Expert As Button
+	Private Sound As Button
+	Private Leaderboard As Button
+Dim MenuAnim As Timer
+Dim Hide As Boolean=False
+Dim imv As ImageView
+Dim pv As PhoneVibrate
+Private Galka As ImageView
+Dim Level As Int
+Private Galka2 As ImageView
+Dim SoundOn As Boolean=True
+Dim p As Phone
+Dim Winn As Boolean
+Dim lose As Boolean
+	Private Mine2 As Panel
+	Private Custom As Button
+	Private CustomPanel As Panel
+	Private OK As Button
+	Private Cancel As Button
+	Private H As EditText
+	Private W As EditText
+	Private Mine As EditText
+Public WinOpen As Boolean
+Dim FaceTimer As Timer
+Type B(score As Int,name As String)
+Dim beg As B
+Dim emm As B
+Dim exp As B
+	Private dlgrec As Panel
+	Private bn As Label
+	Private In As Label
+	Private en As Label
+	Private bs As Label
+	Private iss As Label
+	Private es As Label
+	Private OK2 As Button
+	Private Reset As Button
+	Private Rules As Button
+	Private About As Button
+	Private EditText1 As EditText
+	Private BestPanel As Panel
+	Private OK3 As Button
+	Dim lblText As Label
+Dim first As Boolean
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+
+	Dim vWidth,vHeight As Float
+	Dim c As Int
+	For c = 0 To PZ.Length-1
+		vWidth = Activity.Width
+		vHeight =Activity.Height
+		imv.Initialize("")
+		imv.Gravity = Gravity.FILL
+		Activity.AddView(imv,0,0,vWidth,vHeight)
+		imv.Left = 0
+		imv.top = 0
+		'------------------------------
+		PZ(c).Initialize(imv,"PZ",c,1,3,3,False,Me)
+		PZ(c).LimitArea=True
+	Next
+Activity.LoadLayout("Mine")
+cnvs.Initialize(imv)
+If FirstTime Then
+ If File.Exists(File.DirInternalCache, "Pref.txt") = False Then
+   File.Copy(File.DirAssets, "Pref.txt", File.DirInternalCache, "Pref.txt")
+ End If
+End If
+LoadFile	
+vistavlenie
+cnvs2.Initialize(Mine2)
+bmp.Initialize(File.DirAssets, "Mine2.bmp")
+RectFon.Initialize(0,0,Mine2.Width,Mine2.Height)
+cnvs2.DrawBitmap(bmp,Null,RectFon)
+Mine2.Invalidate
+cnvs3.Initialize(CustomPanel)
+bmp.Initialize(File.DirAssets, "Tint.png")
+RectFon.Initialize(0,0,CustomPanel.Width,CustomPanel.Height)
+cnvs3.DrawBitmap(bmp,Null,RectFon)
+CustomPanel.Invalidate
+cnvs3.Initialize(CustomPanel)
+bmp.Initialize(File.DirAssets, "CustomPanel.png")
+RectFon.Initialize(0,20%x,CustomPanel.Width,120%x)
+cnvs3.DrawBitmap(bmp,Null,RectFon)
+CustomPanel.Invalidate
+
+cnvs3.Initialize(dlgrec)
+bmp.Initialize(File.DirAssets, "Tint.png")
+RectFon.Initialize(0,0,dlgrec.Width,dlgrec.Height)
+cnvs3.DrawBitmap(bmp,Null,RectFon)
+dlgrec.Invalidate
+cnvs3.Initialize(dlgrec)
+bmp.Initialize(File.DirAssets, "Fastest.png")
+RectFon.Initialize(0,20%x,dlgrec.Width,120%x)
+cnvs3.DrawBitmap(bmp,Null,RectFon)
+dlgrec.Invalidate
+cnvs3.Initialize(BestPanel)
+bmp.Initialize(File.DirAssets, "Tint.png")
+RectFon.Initialize(0,0,BestPanel.Width,BestPanel.Height)
+cnvs3.DrawBitmap(bmp,Null,RectFon)
+BestPanel.Invalidate
+InitGame
+End Sub
+
+Sub InitGame
+  Dim i As Int, j As Int
+  Dim s As String
+bmp.Initialize(File.DirAssets, "Mine.bmp")
+RectFon.Initialize(0,0,Activity.Width, 1.5*Activity.Width)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+bmp.Initialize(File.DirAssets, "gameb.png")
+RectFon.Initialize(5%x,18%x,23%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+bmp.Initialize(File.DirAssets, "helpb.png")
+RectFon.Initialize(25%x,18%x,43%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+bmp.Initialize(File.DirAssets, "exitbutton.png")
+RectFon.Initialize(87%x,4%x,97%x, 14%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+  If Timer1.Enabled Then Timer1.Enabled = False
+  Winn=False
+  lose=False
+  ind(1).value = 1
+  CloseCell = SizeX * SizeY
+  GameOver = False
+  ind(0).x = 12%x
+  ind(0).y = 37%x
+  ind(0).value = 0
+  ind(1).x = 62%x
+  ind(1).y = 37%x
+  ind(1).value = 0
+  Face.x = 42%x
+  Face.y = 36%x
+  Face.Face = 4
+  If SizeX=SizeY Then
+  conCellHeight=(86%x/SizeY)
+  conCellWidth=(86%x/SizeX)
+  Dsk.x = 9%x
+  Dsk.y = 60%x
+  End If
+  If SizeX>SizeY Then
+  conCellHeight=(86%x/SizeX)
+  conCellWidth=(86%x/SizeX)
+  Dsk.x = 9%x
+  Dsk.y = 60%x+(SizeX-SizeY)/2*conCellHeight
+  End If
+   If SizeX<SizeY Then
+  conCellHeight=(86%x/SizeY)
+  conCellWidth=(86%x/SizeY)
+  Dsk.x = 9%x+(SizeY-SizeX)/2*conCellWidth
+  Dsk.y = 60%x
+  End If
+  Dsk.width = SizeX * conCellWidth
+  Dsk.height = SizeY * conCellHeight
+  Dim Doska(SizeY + 2, SizeX + 2) As Int
+  Dim Doska1(SizeY + 2, SizeX + 2)As Int
+  
+  GenerateDoska
+
+  FaceBtn(0)
+  
+  Indikator(0, KolMines)
+  Indikator (1, 0)
+  For i = 1 To SizeY
+    For j = 1 To SizeX
+      DoskaCell (i, j, 0)
+    Next
+  Next
+
+  	Activity.Invalidate
+	 first = True
+End Sub
+
+Sub DoskaCell(i As Int, j As Int, Cell As Int)
+	bmp.Initialize(File.DirAssets, "bmp101XP.bmp")
+	SrcRect.Initialize(0, Cell * bmp.Height/16, bmp.Width, Cell * bmp.Height/16+bmp.Height/16) 'the left half of the bitmap.
+	RectFon.Initialize(Dsk.x + (j - 1) * conCellWidth,Dsk.y + (i - 1) * conCellHeight,Dsk.x + (j - 1) * conCellWidth+conCellWidth ,Dsk.y + (i - 1) * conCellHeight+conCellHeight)
+	cnvs.DrawBitmap(bmp, SrcRect, RectFon) 'draws half of the bitmap.
+End Sub
+
+Sub Indikator(id As Int, new_value As Int)
+  Dim str_value As String
+  Dim i As Int
+  If new_value < 1000 Then
+      ind(id).value = new_value
+      str_value = ind(id).value
+	  str_value.Trim
+	  For i=0 To (3 - str_value.Length)-1
+      str_value = "0" &str_value
+	  Next
+      For i = 1 To 3
+'        PaintPicture Pic02, ind(id).x + conZifraWidth * (i - 1), ind(id).y, , , 0, (11 - Val(Mid$(str_value, _
+'        i, 1))) * conZifraHeight, , conZifraHeight
+	bmp.Initialize(File.DirAssets, "bmp102.bmp")
+	SrcRect.Initialize(0,  (11 - sf.Mid(str_value,i,1)) * bmp.Height/12, bmp.Width,  (11 -sf.Mid(str_value,i,1))* bmp.Height/12+bmp.Height/12) 'the left half of the bitmap.
+	RectFon.Initialize(ind(id).x + conZifraWidth * (i - 1),ind(id).y ,ind(id).x + conZifraWidth * (i - 1) +conZifraWidth ,ind(id).y+conZifraHeight)
+	cnvs.DrawBitmap(bmp, SrcRect, RectFon) 'draws half of the bitmap.
+	imv.Invalidate
+ 
+	  
+	bmp.Initialize(File.DirAssets, "bmp102.bmp")
+	SrcRect.Initialize(0,  (11 - sf.Mid(str_value,i,1)) * bmp.Height/12, bmp.Width,  (11 -sf.Mid(str_value,i,1))* bmp.Height/12+bmp.Height/12) 'the left half of the bitmap.
+	RectFon.Initialize(ind(id).x + conZifraWidth * (i - 1),ind(id).y-27%x ,ind(id).x + conZifraWidth * (i - 1) +conZifraWidth ,ind(id).y-27%x+conZifraHeight)
+	cnvs2.DrawBitmap(bmp, SrcRect, RectFon) 'draws half of the bitmap.
+	Mine2.Invalidate
+Next
+  End If
+End Sub
+
+Sub FaceBtn(New_Face As Int)
+    Face.Face = New_Face
+'    Line (Face.x,Face.y)-(Face.x + conFaceWidth + 15, Face.y + conFaceHeight + 15), QBColor(8), B
+	bmp.Initialize(File.DirAssets, "bmp103.bmp")
+	SrcRect.Initialize(0, Face.Face * bmp.Height/5, bmp.Width, Face.Face * bmp.Height/5+bmp.Height/5) 'the left half of the bitmap.
+	RectFon.Initialize(Face.x,Face.y ,Face.x +16%x ,Face.y+16%x)
+	cnvs.DrawBitmap(bmp, SrcRect, RectFon) 'draws half of the bitmap.
+	imv.Invalidate
+	bmp.Initialize(File.DirAssets, "bmp103.bmp")
+	SrcRect.Initialize(0, Face.Face * bmp.Height/5, bmp.Width, Face.Face * bmp.Height/5+bmp.Height/5) 'the left half of the bitmap.
+	RectFon.Initialize(Face.x,Face.y-27%x ,Face.x +16%x ,Face.y-27%x+16%x)
+	cnvs2.DrawBitmap(bmp, SrcRect, RectFon) 'draws half of the bitmap.
+	Mine2.Invalidate
+	
+End Sub
+Sub GenerateDoska()
+  Dim i As Int
+  Dim j As Int
+  Dim k As Int 
+  Dim M As Int
+  Dim ubd As Int
+  Dim AvailX() As Int
+  Dim AvailY() As Int
+  
+  Dim AvailX(SizeX * SizeY+2), AvailY(SizeX * SizeY+2) As Int
+  For i = 1 To SizeY
+    For j = 1 To SizeX
+      AvailX((i - 1) * SizeX + j) = j
+      AvailY((i - 1) * SizeX + j) = i
+    Next
+  Next
+
+  ubd = AvailX.Length-2
+  For M = 1 To KolMines
+    k = Rnd(1,ubd)
+    Doska(AvailY(k), AvailX(k)) = -1  
+    For i = AvailY(k) - 1 To AvailY(k) + 1
+      For j = AvailX(k) - 1 To AvailX(k) + 1
+        If (i <> AvailY(k) Or j <> AvailX(k)) Then
+          If Doska(i, j) >= 0 Then Doska(i, j) = Doska(i, j) + 1
+        End If
+      Next
+    Next
+    AvailX(k) = AvailX(ubd)
+    AvailY(k) = AvailY(ubd)
+    ubd = ubd - 1
+  Next
+  
+End Sub
+
+
+Sub vistavlenie
+Timer1.Initialize("Timer1",1000)
+Timer1.Enabled=False
+MenuAnim.Initialize("MenuAnim",1)
+MenuAnim.Enabled=False
+DoubleClick.Initialize("DoubleClick",100)
+DoubleClick.Enabled=True
+FaceTimer.Initialize("FaceTimer",200)
+FaceTimer.Enabled=False
+FlagT.Initialize("FlagT",1)
+FlagT.Enabled=False
+VoprT.Initialize("VoprT",1)
+VoprT.Enabled=False
+Flag.Width=30%x
+Flag.Height=30%x
+Vopr.Width=40%x
+Vopr.Height=40%x
+MP.Initialize2("MP")
+
+New.Left=5%x
+New.Top=28%x
+New.Width=50%x
+New.Height=14%x
+cnvs4.Initialize(New)
+bmp.Initialize(File.DirAssets, "new.png")
+RectFon.Initialize(0,0,New.Width,New.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+New.Invalidate
+
+Beginner.Left=5%x
+Beginner.Top=28%x
+Beginner.Width=50%x
+Beginner.Height=14%x
+cnvs4.Initialize(Beginner)
+bmp.Initialize(File.DirAssets, "beginner.png")
+RectFon.Initialize(0,0,New.Width,New.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Beginner.Invalidate
+
+Medium.Left=5%x
+Medium.Top=28%x
+Medium.Width=50%x
+Medium.Height=14%x
+cnvs4.Initialize(Medium)
+bmp.Initialize(File.DirAssets, "medium.png")
+RectFon.Initialize(0,0,New.Width,New.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Medium.Invalidate
+
+Expert.Left=5%x
+Expert.Top=28%x
+Expert.Width=50%x
+Expert.Height=14%x
+cnvs4.Initialize(Expert)
+bmp.Initialize(File.DirAssets, "expert.png")
+RectFon.Initialize(0,0,New.Width,New.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Expert.Invalidate
+
+Custom.Left=5%x
+Custom.Top=28%x
+Custom.Width=50%x
+Custom.Height=14%x
+cnvs4.Initialize(Custom)
+bmp.Initialize(File.DirAssets, "custom.png")
+RectFon.Initialize(0,0,New.Width,New.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Custom.Invalidate
+
+Sound.Left=5%x
+Sound.Top=28%x
+Sound.Width=50%x
+Sound.Height=14%x
+cnvs4.Initialize(Sound)
+bmp.Initialize(File.DirAssets, "sound.png")
+RectFon.Initialize(0,0,New.Width,New.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Sound.Invalidate
+
+Leaderboard.Left=5%x
+Leaderboard.Top=28%x
+Leaderboard.Width=50%x
+Leaderboard.Height=14%x
+cnvs4.Initialize(Leaderboard)
+bmp.Initialize(File.DirAssets, "leaderboard.png")
+RectFon.Initialize(0,0,New.Width,New.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Leaderboard.Invalidate
+
+Vopr.Bitmap=LoadBitmap(File.DirAssets,"VoprXP.png")
+Flag.Bitmap=LoadBitmap(File.DirAssets,"FlagXP.png")
+
+
+Rules.Left=25%x
+Rules.Top=28%x
+Rules.Width=50%x
+Rules.Height=14%x
+cnvs4.Initialize(Rules)
+bmp.Initialize(File.DirAssets, "howtoplay.png")
+RectFon.Initialize(0,0,New.Width,New.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Rules.Invalidate
+
+About.Left=25%x
+About.Top=28%x
+About.Width=50%x
+About.Height=14%x
+cnvs4.Initialize(About)
+bmp.Initialize(File.DirAssets, "about.png")
+RectFon.Initialize(0,0,New.Width,New.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+About.Invalidate
+
+Galka.Width=3%x
+Galka.Height=12%x
+Galka.Left=7%x
+cnvs4.Initialize(Galka)
+bmp.Initialize(File.DirAssets, "galka.png")
+RectFon.Initialize(0,0,Galka.Width,Galka.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Galka.Invalidate
+Galka2.Width=3%x
+Galka2.Height=12%x
+Galka2.Left=7%x
+cnvs4.Initialize(Galka2)
+bmp.Initialize(File.DirAssets, "galka.png")
+RectFon.Initialize(0,0,Galka2.Width,Galka2.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Galka2.Invalidate
+Mine2.Left=0
+Mine2.Top=0
+Mine2.Height=33%x
+Mine2.Width=100%x
+
+CustomPanel.Width=100%x
+CustomPanel.Height=100%y
+CustomPanel.Left=0
+CustomPanel.Top=50%y-CustomPanel.Height/2
+BestPanel.Width=100%x
+BestPanel.Height=100%y
+BestPanel.Left=0
+BestPanel.Top=50%y-BestPanel.Height/2
+dlgrec.Width=100%x
+dlgrec.Height=100%y
+dlgrec.Left=0
+dlgrec.Top=50%y-dlgrec.Height/2
+
+bs.Width=27%x
+bs.Height=11%x
+bs.Left=38%x
+bs.top=52%x
+bn.Width=30%x
+bn.Height=10%x
+bn.Left=65%x
+bn.top=52%x
+SetLabelTextSize(bs,beg.score&" seconds",100,1)
+SetLabelTextSize(bn,beg.name,100,1)
+bs.Text=beg.score&" seconds"
+bn.Text=beg.name
+
+iss.Width=27%x
+iss.Height=11%x
+iss.Left=38%x
+iss.top=71%x
+In.Width=30%x
+In.Height=10%x
+In.Left=65%x
+In.top=71%x
+SetLabelTextSize(iss,emm.score&" seconds",100,1)
+SetLabelTextSize(In,emm.name,100,1)
+iss.Text=emm.score&" seconds"
+In.Text=emm.name
+
+es.Width=27%x
+es.Height=11%x
+es.Left=38%x
+es.top=90%x
+en.Width=30%x
+en.Height=10%x
+en.Left=65%x
+en.top=90%x
+SetLabelTextSize(es,exp.score&" seconds",100,1)
+SetLabelTextSize(en,exp.name,100,1)
+es.Text=exp.score&" seconds"
+en.Text=exp.name
+
+OK.Width=30%x
+OK.Height=13%x
+OK.Left=60%x
+OK.Top=62%x
+cnvs4.Initialize(OK)
+bmp.Initialize(File.DirAssets, "OK.png")
+RectFon.Initialize(0,0,OK.Width,OK.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+OK.Invalidate
+OK3.Width=30%x
+OK3.Height=13%x
+OK3.Left=35%x
+OK3.Top=90%x
+cnvs4.Initialize(OK3)
+bmp.Initialize(File.DirAssets, "OK.png")
+RectFon.Initialize(0,0,OK3.Width,OK3.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+OK3.Invalidate
+OK2.Width=30%x
+OK2.Height=13%x
+OK2.Left=60%x
+OK2.Top=102%x
+Reset.Width=40%x
+Reset.Height=13%x
+Reset.Left=15%x
+Reset.Top=102%x
+cnvs4.Initialize(OK2)
+bmp.Initialize(File.DirAssets, "OK.png")
+RectFon.Initialize(0,0,OK2.Width,OK2.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+OK2.Invalidate
+cnvs4.Initialize(Reset)
+bmp.Initialize(File.DirAssets, "Reset.png")
+RectFon.Initialize(0,0,Reset.Width,Reset.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Reset.Invalidate
+Cancel.Width=30%x
+Cancel.Height=13%x
+Cancel.Left=60%x
+Cancel.Top=82%x
+cnvs4.Initialize(Cancel)
+bmp.Initialize(File.DirAssets, "Cancel.png")
+RectFon.Initialize(0,0,OK.Width,OK.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Cancel.Invalidate
+
+H.Width=20%x
+H.Height=10%x
+H.Top=60%x
+H.Left=35%x
+H.Color=Colors.White
+W.Width=20%x
+W.Height=10%x
+W.Top=73%x
+W.Left=35%x
+W.Color=Colors.White
+Mine.Width=20%x
+Mine.Height=10%x
+Mine.Top=86%x
+Mine.Left=35%x
+Mine.Color=Colors.White
+EditText1.Width=90%x
+EditText1.Height=15%x
+EditText1.Left=5%x
+EditText1.Top=65%x
+EditText1.Color=Colors.White
+lblText.Height=100%y
+lblText.Width=100%x
+lblText.Left=0
+lblText.Top=0
+SetLabelTextSize(lblText,File.GetText(File.DirAssets,"Minesweeper instruction.txt"),100,1)
+lblText.Text=File.GetText(File.DirAssets,"Minesweeper instruction.txt")
+End Sub
+
+Sub Activity_Resume
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+Save
+End Sub
+Sub PZ_Click (TouchData As TouchData)
+Try
+If WinOpen=False Then
+ Dim i As Int=0, j As Int=0, i1 As Int=0, j1 As Int=0,empt As Int, x As Float,y As Float
+ x=TouchData.x/(PZ(NumView).Zoom/100)
+ y=TouchData.y/(PZ(NumView).Zoom/100)
+ If x>=5%x And x<=23%x And y>=18%x And y<=27%x Then Gameb
+ If x>=25%x And x<=43%x And y>=18%x And y<=27%x Then Helpb
+ If x>=87%x And x<=97%x And y>=4%x And y<=14%x Then ExitApplication
+  If Hide=False Then
+	LongC=False
+	DoubleClick.Enabled=True
+	Time0=DateTime.Now
+	x0=x
+	y0=y
+	OldX = x
+	OldY = y
+	OldFace = Face.Face
+    If FaceCoord(x,y) Then 
+	FaceBtn(0) 
+	Else 
+	   If Not(GameOver) Then FaceBtn(3)
+	End If
+    If Not(GameOver) Then
+      If DoskaCoord(x, y) Then
+        XY2IJ (x, y, i, j)
+		i=mmm
+		j=nnn
+        If Doska1(i, j) = 0 Then
+          DoskaCell (i, j, 15)
+		  	Activity.Invalidate
+          OldI = i: OldJ = j
+        Else
+          OldI = 0: OldJ = 0
+        End If
+      End If
+    End If
+	OldI = 0: OldJ = 0
+    If FaceCoord(OldX, OldY) And FaceCoord(x, y) Then 
+	FaceBtn(0) 
+	InitGame 
+	Else 
+	If FaceTimer.Enabled=False Then FaceTimer.Enabled=True Else FaceTimer_Tick
+	End If
+    If Not(GameOver) Then
+      If DoskaCoord(x, y) Then
+        If Not(Timer1.Enabled) Then 
+		Timer1.Enabled = True
+		ind(1).value = 1
+		Indikator(1,1)
+		End If
+        XY2IJ (x, y, i, j)
+		i=mmm
+		j=nnn
+        If Doska1(i, j) = 0 Then
+          Select Doska(i, j)
+            Case -1 
+				 If first Then
+           Find_clean_place
+           Doska(i, j) = 0
+           Clear_sosedi
+           Count_sosedi
+           
+              Doska1(i, j) = 3
+              DoskaCell (i, j, (8 - Doska(i, j)) + 7)
+              CloseCell = CloseCell - 1
+              If Doska(i, j) = 0 Then
+                empt = 1
+                Do While empt > 0
+                  empt = 0
+                  For i = 1 To SizeY
+                    For j = 1 To SizeX
+                      If Doska(i, j) = 0 And Doska1(i, j) = 3 Then
+                        For i1 = i - 1 To i + 1
+                          For j1 = j - 1 To j + 1
+                            If i1 >= 1 And i1 <= SizeY And j1 >= 1 And j1 <= SizeX Then
+                              If Doska1(i1, j1) = 0 Then
+                                empt = empt + 1
+                                Doska1(i1, j1) = 3
+                                DoskaCell (i1, j1, (8 - Doska(i1, j1)) + 7)
+                                CloseCell = CloseCell - 1
+                                If CloseCell = KolMines Then Win
+                              End If
+                            End If
+                          Next
+                        Next
+                      End If
+                    Next
+                  Next
+                Loop
+            End If
+    Else
+        Loss (i, j)
+    End If
+            Case 0,1,2,3,4,5,6,7,8
+              Doska1(i, j) = 3
+              DoskaCell (i, j, (8 - Doska(i, j)) + 7)
+			  	imv.Invalidate
+              CloseCell = CloseCell - 1
+              If CloseCell = KolMines Then Win
+              If Doska(i, j) = 0 Then
+                empt = 1
+                Do While empt > 0
+                  empt = 0
+                  For i = 1 To SizeY
+                    For j = 1 To SizeX
+                      If Doska(i, j) = 0 And Doska1(i, j) = 3 Then
+                        For i1 = i - 1 To i + 1
+                          For j1 = j - 1 To j + 1
+                            If i1 >= 1 And i1 <= SizeY And j1 >= 1 And j1 <= SizeX Then
+                              If Doska1(i1, j1) = 0 Then
+                                empt = empt + 1
+                                Doska1(i1, j1) = 3
+                                DoskaCell (i1, j1, (8 - Doska(i1, j1)) + 7)
+								imv.Invalidate
+                                CloseCell = CloseCell - 1
+                                If CloseCell = KolMines Then Win
+                              End If
+                            End If
+                          Next
+                        Next
+                      End If
+                    Next
+                  Next
+                Loop
+              End If
+              
+          End Select
+        End If
+      End If
+    End If
+Else
+MenuAnim.Enabled=True
+End If
+End If
+ If CloseCell < SizeX * SizeY Then first = False
+Catch
+    Log(LastException.Message)
+End Try
+End Sub
+
+Sub PZ_LongClick (TouchData As TouchData)
+If WinOpen=False Then
+	Dim i As Int, j As Int, x As Float,y As Float
+   xlong=TouchData.x+imv.Left
+	ylong=TouchData.y+imv.top
+ x=TouchData.x/(PZ(NumView).Zoom/100)
+ y=TouchData.y/(PZ(NumView).Zoom/100)
+   If Not(GameOver) Then
+      If DoskaCoord(x, y) Then
+        XY2IJ (x, y, i, j)
+		i=mmm
+		j=nnn
+        Select Doska1(i, j)
+          Case 0            'Устанавливаем флажок
+            If ind(0).value >= 1 Then
+			FlagT.Enabled=True
+              Doska1(i, j) = 1
+              DoskaCell (i, j, 1)
+			  	Activity.Invalidate
+              Indikator (0, ind(0).value - 1)
+			  If SoundOn Then pv.Vibrate(100)
+            End If
+          Case 1            'Устанавливаем метку (?)
+		  	VoprT.Enabled=True
+            Doska1(i, j) = 2
+            DoskaCell (i, j, 2)
+            Indikator(0, ind(0).value + 1)
+				Activity.Invalidate
+				If SoundOn Then pv.Vibrate(100)
+          Case 2            'Снимаем метку (?)
+            Doska1(i, j) = 0
+            DoskaCell (i, j, 0)
+			Activity.Invalidate
+			If SoundOn Then pv.Vibrate(100)
+        End Select
+      End If
+    End If
+	LongC=True
+	If Not(Winn) And Not(lose) Then FaceBtn(4)
+	End If
+End Sub
+
+
+
+Sub XY2IJ( x As Float, y As Float, i As Int, j As Int)
+  x = x - Dsk.x
+  y = y - Dsk.y
+  mmm = y / conCellHeight
+  nnn = x / conCellWidth
+  If y Mod conCellHeight > 0 Or mmm=0 Then mmm = mmm + 1
+  If x Mod conCellWidth > 0 Or nnn=0 Then nnn = nnn + 1
+End Sub
+
+Sub DoskaCoord(x As Float, y As Float) As Boolean
+  If (x >= Dsk.x ) And (x <= Dsk.x + Dsk.width ) And (y >= Dsk.y) And (y <= Dsk.y + Dsk.height ) Then Return True Else Return False
+End Sub
+
+Sub FaceCoord(x As Float, y As Float) As Boolean
+  If ((x >= Face.x) And (x<= Face.x + conFaceWidth) And (y >= Face.y) And (y <= Face.y + conFaceWidth)) Then Return True Else Return False
+End Sub
+
+
+Sub Win
+  Dim i As Int, j As Int
+   FaceBtn(1)
+  If SoundOn Then
+MP.Load(File.DirAssets,"win.wav")
+MP.Play
+End If
+Winn=True
+  'Выводим на месте неоткрытых клеток флажки
+  For i = 1 To SizeY
+    For j = 1 To SizeX
+      If Doska1(i, j) < 3 Then
+        Doska1(i, j) = 1
+        DoskaCell (i, j, 1)
+			Activity.Invalidate
+        Indikator (0, 0)
+      End If
+    Next
+  Next
+  FaceBtn (1)
+  GameOver = True
+  Timer1.Enabled = False
+  If (Level<3) Then
+  Select Level
+  Case 0
+   If ind(1).value < beg.score Then 
+   beg.score=ind(1).value
+cnvs3.Initialize(BestPanel)
+bmp.Initialize(File.DirAssets, "Bestb.png")
+RectFon.Initialize(0,20%x,CustomPanel.Width,120%x)
+cnvs3.DrawBitmap(bmp,Null,RectFon)
+BestPanel.Invalidate
+   BestPanel.Visible=True
+   WinOpen=True
+   SetEditTextSize(EditText1,"Anonymous",100,1)
+   EditText1.Text="Anonymous"
+   End If
+   Case 1
+   If ind(1).value <emm.score Then 
+   emm.score=ind(1).value
+cnvs3.Initialize(BestPanel)
+bmp.Initialize(File.DirAssets, "Besti.png")
+RectFon.Initialize(0,20%x,CustomPanel.Width,120%x)
+cnvs3.DrawBitmap(bmp,Null,RectFon)
+BestPanel.Invalidate
+   BestPanel.Visible=True
+   WinOpen=True
+   SetEditTextSize(EditText1,"Anonymous",100,1)
+   EditText1.Text="Anonymous"
+   End If
+   Case 2
+	If ind(1).value <exp.score Then 
+   exp.score=ind(1).value
+cnvs3.Initialize(BestPanel)
+bmp.Initialize(File.DirAssets, "Beste.png")
+RectFon.Initialize(0,20%x,CustomPanel.Width,120%x)
+cnvs3.DrawBitmap(bmp,Null,RectFon)
+BestPanel.Invalidate
+   BestPanel.Visible=True
+   WinOpen=True
+   SetEditTextSize(EditText1,"Anonymous",100,1)
+   EditText1.Text="Anonymous"
+   End If
+   End Select
+  End If
+ End Sub
+ 
+ Sub Loss(i As Int, j As Int)
+ FaceBtn(2)
+  Dim i1 As Int, j1 As Int
+  lose=True
+  If SoundOn Then
+  pv.Vibrate(100)
+  MP.Load(File.DirAssets,"lose.wav")
+  MP.Play
+  End If
+  DoskaCell (i, j, 3)
+  For i1 = 1 To SizeY
+    For j1 = 1 To SizeX
+      If i <> i1 Or j <> j1 Then
+        If Doska(i1, j1) = -1 Then
+          If Doska1(i1, j1) <> 1 Then DoskaCell (i1, j1, 5)
+        Else
+          If Doska1(i1, j1) = 1 Then DoskaCell (i1, j1, 4)
+        End If
+      End If
+	  	Activity.Invalidate
+    Next
+  Next
+  FaceBtn (2)
+  GameOver = True
+  Timer1.Enabled = False
+  Save
+End Sub
+
+Sub Timer1_Tick
+  Indikator (1, ind(1).value + 1)
+  If SoundOn Then
+  MP.Load(File.DirAssets,"time.wav")
+  MP.Play
+  End If
+End Sub
+
+Sub FaceTimer_Tick
+If Not(lose) And Not(Winn) Then FaceBtn(OldFace)
+FaceTimer.Enabled=False
+End Sub
+
+Sub DoubleClick_Tick
+ If Not(lose) And Not(Winn) Then FaceBtn(4)
+  If imv.top/(PZ(NumView).Zoom/100)<-28%x Then Mine2.Visible=True Else Mine2.Visible=False
+
+    If WinOpen=True Then
+cnvs4.Initialize(Reset)
+bmp.Initialize(File.DirAssets, "Reset.png")
+RectFon.Initialize(0,0,Reset.Width,Reset.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Reset.Invalidate
+End If
+End Sub
+Sub FlagT_Tick
+Flag.Visible=True
+  Flag.Width=Flag.Width-1%x
+  Flag.Height=Flag.Height-1%x
+  Flag.Top=ylong-Flag.Height/2
+  Flag.left=xlong-Flag.Width/2
+  If Flag.Width<=0 Then 
+  FlagT.Enabled=False 
+  Flag.Visible=False
+  Flag.Width=30%x
+  Flag.Height=30%x
+  End If
+End Sub
+Sub VoprT_Tick
+Vopr.Visible=True
+  Vopr.Width=Vopr.Width-1%x
+ Vopr.Height=Vopr.Height-1%x
+  Vopr.Top=ylong-Vopr.Height/2
+  Vopr.left=xlong-Vopr.Width/2
+  If Vopr.Width<=0 Then 
+  VoprT.Enabled=False 
+  Vopr.Visible=False
+  Vopr.Width=40%x
+  Vopr.Height=40%x
+  End If
+End Sub
+
+Sub Gameb
+If game=False And Hide=True Then game=False Else game=True
+    MenuAnim.Enabled=True
+	bmp.Initialize(File.DirAssets, "gamebp.png")
+RectFon.Initialize(5%x,18%x,23%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+End Sub
+
+Sub MenuAnim_Tick
+If game Then
+If Hide=False Then
+If Beginner.Top<New.Top+New.Height-2.5%x Then
+Beginner.Top=Beginner.Top+4%x
+Medium.Top=Medium.Top+4%x
+Expert.Top=Expert.Top+4%x
+Custom.Top=Custom.Top+4%x
+Sound.Top=Sound.Top+4%x
+Leaderboard.Top=Leaderboard.Top+4%x
+Else
+New.Visible=True
+Beginner.Visible=True
+Medium.Visible=True
+Expert.Visible=True
+Custom.Visible=True
+Sound.Visible=True
+Leaderboard.Visible=True
+If Medium.Top<Beginner.Top+Beginner.Height-2.5%x Then
+Medium.Top=Medium.Top+4%x
+Expert.Top=Expert.Top+4%x
+Custom.Top=Custom.Top+4%x
+Sound.Top=Sound.Top+4%x
+Leaderboard.Top=Leaderboard.Top+4%x
+Else
+If Expert.Top<Medium.Top+Medium.Height-2.5%x Then
+Expert.Top=Expert.Top+4%x
+Custom.Top=Custom.Top+4%x
+Sound.Top=Sound.Top+4%x
+Leaderboard.Top=Leaderboard.Top+4%x
+Else
+If Custom.Top<Expert.Top+Expert.Height-2.5%x Then
+Custom.Top=Custom.Top+4%x
+Sound.Top=Sound.Top+4%x
+Leaderboard.Top=Leaderboard.Top+4%x
+Else
+If Sound.Top<Custom.Top+Custom.Height-2.5%x Then
+Sound.Top=Sound.Top+4%x
+Leaderboard.Top=Leaderboard.Top+4%x
+Else
+If Leaderboard.Top<Sound.Top+Sound.Height-2.5%x Then
+Leaderboard.Top=Leaderboard.Top+4%x
+Else
+MenuAnim.Enabled=False
+Hide=True
+Select Level
+Case 0
+Galka.Top=Beginner.top
+Case 1
+Galka.Top=Medium.top
+Case 2
+Galka.Top=Expert.top
+Case 3
+Galka.Top=Custom.top
+End Select
+Galka.Visible=True
+bmp.Initialize(File.DirAssets, "gameb.png")
+RectFon.Initialize(5%x,18%x,23%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+bmp.Initialize(File.DirAssets, "helpb.png")
+RectFon.Initialize(25%x,18%x,43%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+Galka2.Top=Sound.top
+If SoundOn Then Galka2.Visible=True
+End If
+End If
+End If
+End If
+End If
+End If
+Else
+If Leaderboard.Top+Leaderboard.Height>=Sound.Top+Sound.Height+2%x Then
+Galka.Visible=False
+Galka2.Visible=False	
+Leaderboard.Top=Leaderboard.Top-4%x
+Else
+If Sound.Top+Sound.Height>=Custom.Top+Custom.Height+2%x Then
+Sound.Top=Sound.Top-4%x
+Leaderboard.Top=Leaderboard.Top-4%x
+Else
+If Custom.Top+Custom.Height>=Expert.Top+Expert.Height+2%x Then
+Custom.Top=Custom.Top-4%x
+Sound.Top=Sound.Top-4%x
+Leaderboard.Top=Leaderboard.Top-4%x
+Else
+If Expert.Top+Expert.Height>=Medium.Top+Medium.Height+2%x Then
+Expert.Top=Expert.Top-4%x
+Custom.Top=Custom.Top-4%x
+Sound.Top=Sound.Top-4%x
+Leaderboard.Top=Leaderboard.Top-4%x
+Else
+If Medium.Top+Medium.Height>=Beginner.Top+Beginner.Height+2%x Then
+Medium.Top=Medium.Top-4%x
+Expert.Top=Expert.Top-4%x
+Custom.Top=Custom.Top-4%x
+Sound.Top=Sound.Top-4%x
+Leaderboard.Top=Leaderboard.Top-4%x
+Else
+New.Visible=False
+Beginner.Visible=False
+Medium.Visible=False
+Expert.Visible=False
+Sound.Visible=False
+Leaderboard.Visible=False
+Custom.Visible=False
+If Beginner.Top+Beginner.Height>=New.Top+New.Height+2%x Then
+Beginner.Top=Beginner.Top-4%x
+Medium.Top=Medium.Top-4%x
+Expert.Top=Expert.Top-4%x
+Custom.Top=Custom.Top-4%x
+Sound.Top=Sound.Top-4%x
+Leaderboard.Top=Leaderboard.Top-4%x
+Else
+bmp.Initialize(File.DirAssets, "gameb.png")
+RectFon.Initialize(5%x,18%x,23%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+bmp.Initialize(File.DirAssets, "helpb.png")
+RectFon.Initialize(25%x,18%x,43%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+MenuAnim.Enabled=False
+Hide=False
+End If
+End If
+End If
+End If
+End If
+End If
+End If
+Else
+If Hide=False Then
+About.Visible=True
+Rules.Visible=True
+If About.Top<Rules.Top+Rules.Height-2.5%x Then
+About.Top=About.Top+4%x
+Else
+bmp.Initialize(File.DirAssets, "helpb.png")
+RectFon.Initialize(25%x,18%x,43%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+bmp.Initialize(File.DirAssets, "gameb.png")
+RectFon.Initialize(5%x,18%x,23%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+MenuAnim.Enabled=False
+Hide=True
+End If
+Else
+If About.Top+About.Height>=Rules.Top+Rules.Height+2%x Then
+About.Top=About.Top-4%x
+Else
+About.Visible=False
+Rules.Visible=False
+bmp.Initialize(File.DirAssets, "helpb.png")
+RectFon.Initialize(25%x,18%x,43%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+bmp.Initialize(File.DirAssets, "gameb.png")
+RectFon.Initialize(5%x,18%x,23%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+MenuAnim.Enabled=False
+Hide=False
+End If
+End If
+End If
+End Sub
+
+Sub New_Click
+	InitGame
+	MenuAnim.Enabled=True
+End Sub
+Sub Beginner_Click
+	SizeX=9
+	SizeY=9
+	KolMines=10
+	Level=0
+	InitGame
+	MenuAnim.Enabled=True
+	Save
+End Sub
+Sub Sound_Click
+	SoundOn=Not(SoundOn)
+	If SoundOn Then Galka2.Visible=True Else Galka2.Visible=False
+	Save
+End Sub
+Sub Medium_Click
+	SizeX=16
+	SizeY=16
+	KolMines=40
+	Level=1
+	InitGame
+	MenuAnim.Enabled=True
+	Save
+End Sub
+Sub Expert_Click
+	SizeX=30
+	SizeY=16
+	KolMines=99
+	Level=2
+	InitGame
+	MenuAnim.Enabled=True
+	Save
+End Sub
+
+Sub Mine2_Touch (Action As Int, X As Float, Y As Float)
+If WinOpen=False Then
+If X>Face.X And X<Face.X+conFaceWidth And Y>Face.Y-27%x And Y<Face.Y-27%x+conFaceHeight Then InitGame Else FaceBtn(OldFace)	
+End If
+End Sub
+Sub Custom_Click
+	Dim a1 As Animation
+	a1.InitializeAlpha("", 0, 1)
+	a1.Duration = 800
+	MenuAnim.Enabled=True
+	CustomPanel.Visible=True
+	a1.Start(CustomPanel)
+	Mine.Enabled=True
+	SetEditTextSize(H,SizeY,100,1)
+	SetEditTextSize(W,SizeX,100,1)
+	SetEditTextSize(Mine,KolMines,100,1)
+	H.Text=SizeY
+	W.Text=SizeX
+	Mine.Text=KolMines
+	WinOpen=True
+End Sub
+Sub OK_Click
+	Dim a1 As Animation
+	a1.InitializeAlpha("", 1, 0)
+	a1.Duration = 800
+    If H.Text="" Then H.Text="0"
+	If W.Text="" Then W.Text="0"
+	If Mine.Text="" Then Mine.Text="0"
+	SizeY=H.Text
+	SizeX=W.Text
+	KolMines=Mine.Text
+	a1.Start(CustomPanel)
+	CustomPanel.Visible=False
+	Level=3
+	If SizeX>30 Then SizeX=30
+	If SizeY>24 Then SizeY=24
+	If KolMines>667 Then KolMines=667
+	If SizeX<9 Then SizeX=9
+	If SizeY<9 Then SizeY=9
+	If KolMines<10 Then KolMines=10
+	If KolMines>=(SizeX-1)*(SizeY-1) Then KolMines=(SizeX-1)*(SizeY-1)
+	Dim Phone As Phone
+	Phone.HideKeyboard(Activity)
+	Mine.Enabled=False
+	WinOpen=False
+	Save
+	InitGame
+End Sub
+Sub Cancel_Click
+	Dim a1 As Animation
+	a1.InitializeAlpha("", 1, 0)
+	a1.Duration = 800
+	a1.Start(CustomPanel)
+	CustomPanel.Visible=False
+	WinOpen=False
+End Sub
+
+Sub LoadFile
+    Dim TextReader1 As TextReader
+    TextReader1.Initialize(File.OpenInput(File.DirInternalCache, "Pref.txt"))
+	Level=TextReader1.ReadLine
+	beg.name=TextReader1.ReadLine
+	beg.score=TextReader1.ReadLine
+	emm.name=TextReader1.ReadLine
+	emm.score=TextReader1.ReadLine
+	exp.name=TextReader1.ReadLine
+	exp.score=TextReader1.ReadLine
+	SizeX=TextReader1.ReadLine
+	SizeY=TextReader1.ReadLine
+	KolMines=TextReader1.ReadLine
+	If TextReader1.ReadLine="1" Then SoundOn=True Else SoundOn=False
+    TextReader1.Close
+End Sub
+
+Sub Save
+ Dim TextWriter1 As TextWriter
+    TextWriter1.Initialize(File.OpenOutput(File.DirInternalCache, "Pref.txt",False))
+	TextWriter1.WriteLine(Level)
+    TextWriter1.WriteLine(beg.name)
+	TextWriter1.WriteLine(beg.score)
+	TextWriter1.WriteLine(emm.name)
+	TextWriter1.WriteLine(emm.score)
+	TextWriter1.WriteLine(exp.name)
+	TextWriter1.WriteLine(exp.score)
+	TextWriter1.WriteLine(SizeX)
+	TextWriter1.WriteLine(SizeY)
+	TextWriter1.WriteLine(KolMines)
+	If SoundOn=True Then TextWriter1.WriteLine("1") Else TextWriter1.WriteLine("0")
+    TextWriter1.Close
+End Sub
+Sub Leaderboard_Click
+Dim a1 As Animation
+a1.InitializeAlpha("", 0, 1)
+a1.Duration = 800
+	MenuAnim.Enabled=True
+	dlgrec.Visible=True
+	a1.Start(dlgrec)
+	SetLabelTextSize(bs,beg.score&" seconds",100,1)
+    SetLabelTextSize(bn,beg.name,100,1)
+	SetLabelTextSize(iss,emm.score&" seconds",100,1)
+    SetLabelTextSize(In,emm.name,100,1)
+	SetLabelTextSize(es,exp.score&" seconds",100,1)
+    SetLabelTextSize(en,exp.name,100,1)
+es.Text=exp.score&" seconds"
+en.Text=exp.name
+iss.Text=emm.score&" seconds"
+In.Text=emm.name
+bs.Text=beg.score&" seconds"
+bn.Text=beg.name
+	WinOpen=True
+End Sub
+Sub OK2_Click
+Dim a1 As Animation
+a1.InitializeAlpha("", 1, 0)
+a1.Duration = 800
+	WinOpen=False
+	a1.Start(dlgrec)
+	dlgrec.Visible=False
+End Sub
+Sub Reset_Click
+	Select Msgbox2("Are you sure?", "", "Yes", "Cancel", "", Null)
+Case DialogResponse.NEGATIVE
+Return True
+Case DialogResponse.Cancel
+Return True
+Case DialogResponse.POSITIVE
+cnvs4.Initialize(Reset)
+bmp.Initialize(File.DirAssets, "ResetP.png")
+RectFon.Initialize(0,0,Reset.Width,Reset.Height)
+cnvs4.DrawBitmap(bmp,Null,RectFon)
+Reset.Invalidate
+	beg.name="Anonymous"
+	beg.score=999
+	emm.name="Anonymous"
+	emm.score=999
+	exp.name="Anonymous"
+	exp.score=999
+    SetLabelTextSize(bs,beg.score&" seconds",100,1)
+    SetLabelTextSize(bn,beg.name,100,1)
+	SetLabelTextSize(iss,emm.score&" seconds",100,1)
+    SetLabelTextSize(In,emm.name,100,1)
+	SetLabelTextSize(es,exp.score&" seconds",100,1)
+    SetLabelTextSize(en,exp.name,100,1)
+	Save
+	es.Text=exp.score&" seconds"
+    en.Text=exp.name
+    iss.Text=emm.score&" seconds"
+    In.Text=emm.name
+    bs.Text=beg.score&" seconds"
+     bn.Text=beg.name
+	 End Select
+End Sub
+Sub Helpb
+If game=True And Hide=True Then game=True Else game=False
+    MenuAnim.Enabled=True
+	bmp.Initialize(File.DirAssets, "helpbp.png")
+    RectFon.Initialize(25%x,18%x,43%x, 27%x)
+cnvs.DrawBitmap(bmp,Null,RectFon)
+Activity.Invalidate
+End Sub
+Sub Remads_Click
+	Dim i As Intent
+    i.Initialize(i.ACTION_VIEW, "https://play.google.com/store/apps/details?id=com.serogen.minesweeper.pro")
+    StartActivity(i)
+End Sub
+
+Sub Activity_KeyPress (KeyCode As Int) As Boolean
+If KeyCode = KeyCodes.KEYCODE_BACK Then 
+Select Msgbox2("Are you sure you want to exit the application?", "", "Yes", "Cancel", "", Null)
+Case DialogResponse.NEGATIVE
+Return True
+Case DialogResponse.Cancel
+Return True
+Case DialogResponse.POSITIVE
+    Save
+	ExitApplication
+End Select
+End If
+End Sub
+Sub Rules_Click
+WinOpen=True
+lblText.Visible=True
+MenuAnim.Enabled=True
+End Sub
+Sub SetLabelTextSize(lbl2 As Label, txt2 As String, MaxFontSize As Float, MinFontSize As Float)
+    Dim FontSize = MaxFontSize As Float
+    Dim Height As Int
+    Dim stu As StringUtils
+    
+    lbl2.TextSize = FontSize
+    Height = stu.MeasureMultilineTextHeight(lbl2, txt2)
+    Do While Height > lbl2.Height And FontSize > MinFontSize 
+        FontSize = FontSize - 1
+        lbl2.TextSize = FontSize
+        Height = stu.MeasureMultilineTextHeight(lbl2, txt2)
+    Loop
+End Sub
+Sub SetEditTextSize(lbl2 As EditText, txt2 As String, MaxFontSize As Float, MinFontSize As Float)
+    Dim FontSize = MaxFontSize As Float
+    Dim Height As Int
+    Dim stu As StringUtils
+    
+    lbl2.TextSize = FontSize
+    Height = stu.MeasureMultilineTextHeight(lbl2, txt2)
+    Do While Height > lbl2.Height-3%x And FontSize > MinFontSize 
+        FontSize = FontSize - 1
+        lbl2.TextSize = FontSize
+        Height = stu.MeasureMultilineTextHeight(lbl2, txt2)
+    Loop
+End Sub
+Sub OK3_Click
+Select Level
+Case 0
+	beg.name=EditText1.Text
+   Save
+   LoadFile
+   SetLabelTextSize(bs,beg.score&" seconds",100,1)
+   SetLabelTextSize(bn,beg.name,100,1) 
+   	bs.Text=beg.score&" seconds"
+    bn.Text=beg.name
+	dlgrec.Visible=True
+Case 1
+	emm.name=EditText1.Text
+   Save
+   LoadFile
+   SetLabelTextSize(iss,emm.score&" seconds",100,1)
+   SetLabelTextSize(In,emm.name,100,1) 
+   	iss.Text=emm.score&" seconds"
+    In.Text=emm.name
+	dlgrec.Visible=True
+Case 2
+	exp.name=EditText1.Text
+   Save
+   LoadFile
+   SetLabelTextSize(es,exp.score&" seconds",100,1)
+   SetLabelTextSize(en,exp.name,100,1) 
+   	es.Text=exp.score&" seconds"
+    en.Text=exp.name
+	dlgrec.Visible=True
+End Select
+BestPanel.Visible=False
+Dim Phone As Phone
+Phone.HideKeyboard(Activity)
+End Sub
+Sub lblText_Click
+	lblText.Visible=False
+	WinOpen=False
+End Sub
+
+Sub Find_clean_place
+  Dim i As Int, j As Int
+          For i = 1 To SizeY
+            For j = 1 To SizeX
+             If Doska(i, j) <> -1 Then
+               Doska(i, j) = -1
+               Return
+            End If
+          Next
+        Next
+End Sub
+Sub Clear_sosedi
+  Dim i As Int, j As Int
+          For i = 0 To SizeY + 1
+            For j = 0 To SizeX
+             If Doska(i, j) <> -1 Then
+               Doska(i, j) = 0
+            End If
+          Next
+        Next
+End Sub
+Sub Count_sosedi
+  Dim i As Int, j As Int, i1 As Int, j1 As Int
+          For i = 1 To SizeY
+            For j = 1 To SizeX
+             If Doska(i, j) = -1 Then
+               For i1 = i - 1 To i + 1
+                 For j1 = j - 1 To j + 1
+                  If Doska(i1, j1) >= 0 Then
+                    Doska(i1, j1) = Doska(i1, j1) + 1
+                  End If
+                Next
+              Next
+            End If
+          Next
+        Next
+                    
+End Sub
+Sub About_Click
+Dim pm As PackageManager
+MenuAnim.Enabled=True
+Rules.Visible=False
+About.Visible=False
+	Msgbox2("'" & pm.GetApplicationLabel("com.serogen.minesweeper.pro") &"' " & pm.GetVersionName("com.serogen.minesweeper.pro") & CRLF & "by Sergey Nesterov","About","OK","","",Null)
+End Sub
